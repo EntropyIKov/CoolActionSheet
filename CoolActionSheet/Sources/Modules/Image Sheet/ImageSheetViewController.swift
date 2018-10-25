@@ -71,7 +71,6 @@ class ImageSheetViewController: UIViewController {
         if let actionSheet = actionSheet {
             parent?.present(actionSheet, animated: true)
         } else {
-            
             let newActionSheet = UIAlertController(title: "\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
             
             let imageCollectionView = getCollectionView(parentRect: newActionSheet.view.bounds)
@@ -106,6 +105,8 @@ class ImageSheetViewController: UIViewController {
         imageCollectionView.backgroundColor = UIColor(white: 1.0, alpha: 0.0)
         imageCollectionView.layer.cornerRadius = 6.0
         imageCollectionView.clipsToBounds = true
+        
+        collectionView = imageCollectionView
         
         return imageCollectionView
     }
