@@ -17,6 +17,7 @@ class ImageSheetViewController: UIViewController {
     private let imageManager = PHCachingImageManager()
     private var thumbnailSize: CGSize!
     private var actionSheet: UIAlertController?
+    private var accessDeniedActionSheet: UIAlertController?
     private var collectionView: UICollectionView!
     private var images: PHFetchResult<PHAsset>?
     private var actions: [UIAlertAction] = []
@@ -64,26 +65,100 @@ class ImageSheetViewController: UIViewController {
     }
     
     func showActionSheet() {
-        guard checkAuthorizationStatus() else {
-            return
+        if checkAuthorizationStatus() {
+            let actionSheet = getActionSheet(accessGranted: true)
+            parent?.present(actionSheet, animated: true)
+//            if let actionSheet = actionSheet {
+//                parent?.present(actionSheet, animated: true)
+//            } else {
+//                let newActionSheet = UIAlertController(title: "\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
+//
+//                let imageCollectionView = getCollectionView(parentRect: newActionSheet.view.bounds)
+//                newActionSheet.view.addSubview(imageCollectionView)
+//
+//                for action in actions {
+//                    newActionSheet.addAction(action)
+//                }
+//                newActionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+//
+//                actionSheet = newActionSheet
+//                parent?.present(newActionSheet, animated: true)
+//            }
+        } else {
+            let actionSheet = getActionSheet(accessGranted: false)
+            parent?.present(actionSheet, animated: true)
+//            if let accessDeniedActionSheet = accessDeniedActionSheet {
+//                parent?.present(accessDeniedActionSheet, animated: true)
+//            } else {
+//                let newActionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+//
+//                let imageCollectionView = getCollectionView(parentRect: newActionSheet.view.bounds)
+//                newActionSheet.view.addSubview(imageCollectionView)
+//
+//                newActionSheet.addAction(UIAlertAction(title: "Access to Library needed. Press to open Settings", style: .default) { _ in
+//                    guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+//                        return
+//                    }
+//
+//                    if UIApplication.shared.canOpenURL(settingsUrl) {
+//                        UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+//                            print("Settings opened: \(success)") // Prints true
+//                        })
+//                    }
+//                })
+//
+//                for action in actions {
+//                    newActionSheet.addAction(action)
+//                }
+//                newActionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+//
+//                accessDeniedActionSheet = newActionSheet
+//                parent?.present(newActionSheet, animated: true)
+        }
+    }
+    
+    func getActionSheet(accessGranted: Bool) -> UIAlertController {
+        var returningActionSheet: UIAlertController
+        if accessGranted {
+            
+            if let actionSheet = actionSheet {
+                return actionSheet
+            } else {
+                returningActionSheet = UIAlertController(title: "\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
+                
+                let imageCollectionView = getCollectionView(parentRect: returningActionSheet.view.bounds)
+                returningActionSheet.view.addSubview(imageCollectionView)
+                actionSheet = returningActionSheet
+            }
+            
+        } else {
+            
+            if let accessDeniedActionSheet = accessDeniedActionSheet {
+                return accessDeniedActionSheet
+            } else {
+                returningActionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+                
+                returningActionSheet.addAction(UIAlertAction(title: "Access to Library needed. Press to open Settings", style: .default) { _ in
+                    guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+                        return
+                    }
+                    
+                    if UIApplication.shared.canOpenURL(settingsUrl) {
+                        UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                            print("Settings opened: \(success)") // Prints true
+                        })
+                    }
+                })
+                accessDeniedActionSheet = returningActionSheet
+            }
+            
         }
         
-        if let actionSheet = actionSheet {
-            parent?.present(actionSheet, animated: true)
-        } else {
-            let newActionSheet = UIAlertController(title: "\n\n\n\n\n", message: nil, preferredStyle: .actionSheet)
-            
-            let imageCollectionView = getCollectionView(parentRect: newActionSheet.view.bounds)
-            newActionSheet.view.addSubview(imageCollectionView)
-            
-            for action in actions {
-                newActionSheet.addAction(action)
-            }
-            newActionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-            
-            actionSheet = newActionSheet
-            parent?.present(newActionSheet, animated: true)
+        for action in actions {
+            returningActionSheet.addAction(action)
         }
+        returningActionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        return returningActionSheet
     }
     
     func getCollectionView(parentRect: CGRect) -> UICollectionView {
