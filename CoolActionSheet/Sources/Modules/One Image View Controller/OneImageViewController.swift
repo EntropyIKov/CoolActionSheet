@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  OneImageViewController.swift
 //  CoolActionSheet
 //
 //  Created by Kovalenko Ilia on 23/10/2018.
@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-class ViewController: UIViewController {
+class OneImageViewController: UIViewController {
 
     //MARK: - Outlet
     @IBOutlet weak private var imageView: UIImageView!

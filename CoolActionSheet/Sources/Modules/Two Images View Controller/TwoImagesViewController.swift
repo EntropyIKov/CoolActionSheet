@@ -1,5 +1,5 @@
 //
-//  SecondViewController.swift
+//  TwoImagesViewController.swift
 //  CoolActionSheet
 //
 //  Created by Kovalenko Ilia on 25/10/2018.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SecondViewController: UIViewController {
+class TwoImagesViewController: UIViewController {
     
     //MARK: - Outlet
     @IBOutlet weak var topImageView: UIImageView!
