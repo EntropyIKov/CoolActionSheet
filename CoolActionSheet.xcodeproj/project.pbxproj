@@ -113,8 +113,8 @@
 		9997DB422181AA9800434BF0 /* Image Sheet */ = {
 			isa = PBXGroup;
 			children = (
-				998F555F217F27FD00A81096 /* ImagesCollectionViewCell.swift */,
 				99E9F3A4217F6578008C4CE5 /* ImageSheetViewController.swift */,
+				998F555F217F27FD00A81096 /* ImagesCollectionViewCell.swift */,
 			);
 			path = "Image Sheet";
 			sourceTree = "<group>";

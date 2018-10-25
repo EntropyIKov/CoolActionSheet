@@ -18,11 +18,11 @@ class ImageSheetViewController: UIViewController {
     private var thumbnailSize: CGSize!
     private var actionSheet: UIAlertController?
     private var collectionView: UICollectionView!
-
+    private var images: PHFetchResult<PHAsset>?
     private var actions: [UIAlertAction] = []
     
     // Shared properties
-    var images: PHFetchResult<PHAsset>!
+    
     var getImageHandler: ((UIImage) -> Void)?
     var targetSize: CGSize? {
         didSet {
@@ -40,7 +40,10 @@ class ImageSheetViewController: UIViewController {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         
         thumbnailSize = CGSize(width: collectionHeight, height: collectionHeight)
-        prepareThumbnails()
+        if checkAuthorizationStatus() {
+            prepareThumbnails()
+        }
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -111,18 +114,21 @@ class ImageSheetViewController: UIViewController {
 //MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension ImageSheetViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        guard let images = images else {
+            return 0
+        }
         return images.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let asset = images.object(at: indexPath.row)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseCellIdentifier, for: indexPath) as! ImagesCollectionViewCell
         
-        cell.representedAssetIdentifier = asset.localIdentifier
-        imageManager.requestImage(for: asset, targetSize: thumbnailSize, contentMode: .aspectFill, options: nil) { image, _ in
-            if cell.representedAssetIdentifier == asset.localIdentifier {
-                cell.populate(with: image)
+        if let asset = images?.object(at: indexPath.row) {
+            cell.representedAssetIdentifier = asset.localIdentifier
+            imageManager.requestImage(for: asset, targetSize: thumbnailSize, contentMode: .aspectFill, options: nil) { image, _ in
+                if cell.representedAssetIdentifier == asset.localIdentifier {
+                    cell.populate(with: image)
+                }
             }
         }
         
@@ -131,10 +137,11 @@ extension ImageSheetViewController: UICollectionViewDelegate, UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let targetSize = targetSize {
-            let selectedAsset = images.object(at: indexPath.row)
             let selectedCell = collectionView.cellForItem(at: indexPath) as! ImagesCollectionViewCell
             getImageHandler?(selectedCell.thumbnailImage)
-            getHighQualityImage(for: selectedAsset, with: targetSize)
+            if let selectedAsset = images?.object(at: indexPath.row) {
+                getHighQualityImage(for: selectedAsset, with: targetSize)
+            }
         }
         actionSheet?.dismiss(animated: true)
     }
@@ -169,8 +176,10 @@ extension ImageSheetViewController {
     }
     
     private func requestAuthorizationForPhoto() {
-        PHPhotoLibrary.requestAuthorization { status in
-            return
+        PHPhotoLibrary.requestAuthorization { [weak self] status in
+            if status == .authorized {
+                self?.prepareThumbnails()
+            }
         }
     }
 }

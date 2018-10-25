@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Photos
 
 class OneImageViewController: UIViewController {
 
@@ -22,6 +21,7 @@ class OneImageViewController: UIViewController {
         super.viewDidLoad()
         
         setupView()
+        configureImageSheetViewController()
     }
     
     @objc func tapHandler() {
@@ -33,8 +33,6 @@ class OneImageViewController: UIViewController {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapHandler))
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(gestureRecognizer)
-        
-        configureImageSheetViewController()
     }
     
     func configureImageSheetViewController() {
