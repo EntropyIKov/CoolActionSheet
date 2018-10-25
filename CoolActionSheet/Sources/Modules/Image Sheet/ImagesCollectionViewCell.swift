@@ -38,7 +38,6 @@ class ImagesCollectionViewCell: UICollectionViewCell {
     
     func populate(with image: UIImage?) {
         thumbnailImage = image
-//        imageView.image = image
     }
 
 }
