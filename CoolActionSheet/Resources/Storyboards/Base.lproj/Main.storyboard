@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="StV-QT-zXe">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Two image Views-->
+        <scene sceneID="ioU-rF-Bxn">
+            <objects>
+                <viewController id="sPN-xX-aMP" customClass="SecondViewController" customModule="CoolActionSheet" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="f04-dr-NmN">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="15086823495691" translatesAutoresizingMaskIntoConstraints="NO" id="qPC-XT-n5V">
+                                <rect key="frame" x="67" y="83" width="240" height="128"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="15086823495732" translatesAutoresizingMaskIntoConstraints="NO" id="zVS-uo-m8t">
+                                <rect key="frame" x="99" y="387" width="177" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="OpB-UR-bZe"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="zVS-uo-m8t" firstAttribute="top" secondItem="qPC-XT-n5V" secondAttribute="bottom" constant="176" id="3a6-SV-0hW"/>
+                            <constraint firstItem="8QF-cR-TMB" firstAttribute="trailing" secondItem="qPC-XT-n5V" secondAttribute="trailing" constant="68" id="CPQ-vV-xuk"/>
+                            <constraint firstItem="8QF-cR-TMB" firstAttribute="bottom" secondItem="zVS-uo-m8t" secondAttribute="bottom" constant="103" id="IxK-Gm-dEf"/>
+                            <constraint firstItem="8QF-cR-TMB" firstAttribute="trailing" secondItem="zVS-uo-m8t" secondAttribute="trailing" constant="99" id="Kp1-mM-j2Y"/>
+                            <constraint firstItem="qPC-XT-n5V" firstAttribute="leading" secondItem="8QF-cR-TMB" secondAttribute="leading" constant="67" id="di7-iV-l1t"/>
+                            <constraint firstItem="qPC-XT-n5V" firstAttribute="top" secondItem="8QF-cR-TMB" secondAttribute="top" constant="63" id="yeU-Ya-Z7g"/>
+                            <constraint firstItem="zVS-uo-m8t" firstAttribute="leading" secondItem="8QF-cR-TMB" secondAttribute="leading" constant="99" id="ykm-qz-hhf"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="8QF-cR-TMB"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Two image Views" id="z92-a8-LPA"/>
+                    <connections>
+                        <outlet property="bottomImageView" destination="zVS-uo-m8t" id="IAc-i5-td1"/>
+                        <outlet property="topImageView" destination="qPC-XT-n5V" id="cQr-1M-gM3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EAu-6q-Kkn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-350" y="-267"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="N5Y-gf-kfp">
+            <objects>
+                <tabBarController id="StV-QT-zXe" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="kKx-he-Eko">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="sPN-xX-aMP" kind="relationship" relationship="viewControllers" id="LBi-n9-Qoc"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="YXn-Qs-H9T"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cMi-5H-Nx6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1377" y="-52"/>
+        </scene>
+        <!--One Image View-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController storyboardIdentifier="ViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BYZ-38-t0r" customClass="ViewController" customModule="CoolActionSheet" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="15086823495691" translatesAutoresizingMaskIntoConstraints="NO" id="lde-tm-ZDN">
+                                <rect key="frame" x="8" y="28" width="359" height="590"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="lde-tm-ZDN" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="8" id="I9M-TV-wTi"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="lde-tm-ZDN" secondAttribute="trailing" constant="8" id="j2l-7Z-sXb"/>
+                            <constraint firstItem="lde-tm-ZDN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="vJD-Xs-Wfm"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="lde-tm-ZDN" secondAttribute="bottom" id="wxe-Nj-ym8"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="One Image View" id="Rmc-Y5-6YO"/>
+                    <connections>
+                        <outlet property="imageView" destination="lde-tm-ZDN" id="Xim-hi-epE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-351.19999999999999" y="399.85007496251876"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="15086823495691" width="461.23046875" height="259.442138671875"/>
+        <image name="15086823495732" width="460.79998779296875" height="259.20001220703125"/>
+    </resources>
+</document>
