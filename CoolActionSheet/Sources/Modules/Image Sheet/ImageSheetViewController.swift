@@ -17,9 +17,31 @@ class ImageSheetViewController: UIViewController {
     private let imageManager = PHCachingImageManager()
     private var thumbnailSize: CGSize!
     private var actionSheet: UIAlertController?
-    private var collectionView: UICollectionView!
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: collectionHeight, height: collectionHeight)
+        
+        let imageCollectionView = UICollectionView(frame: CGRect(x: 8.0, y: 8.0, width: actionSheet!.view.bounds.width - 8.0 * 4, height: collectionHeight), collectionViewLayout: layout)
+        
+        imageCollectionView.delegate = self
+        imageCollectionView.dataSource = self
+        imageCollectionView.showsVerticalScrollIndicator = false
+        imageCollectionView.showsHorizontalScrollIndicator = false
+        imageCollectionView.register(ImagesCollectionViewCell.self, forCellWithReuseIdentifier: reuseCellIdentifier)
+        imageCollectionView.backgroundColor = UIColor(white: 1.0, alpha: 0.0)
+        imageCollectionView.layer.cornerRadius = 6.0
+        imageCollectionView.clipsToBounds = true
+        
+        return imageCollectionView
+    }()
     private var images: PHFetchResult<PHAsset>?
     private var actions: [UIAlertAction] = []
+    private lazy var animator: UIViewPropertyAnimator = {
+        let parameters = UICubicTimingParameters(animationCurve: .easeInOut)
+        let animator = UIViewPropertyAnimator(duration: 0.2, timingParameters: parameters)
+        return animator
+    }()
     
     // Shared properties
     
@@ -28,11 +50,6 @@ class ImageSheetViewController: UIViewController {
         didSet {
             thumbnailSize = targetSize
         }
-    }
-    
-    //MARK: - Action
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
     }
     
     //MARK: - Initialization
@@ -62,7 +79,8 @@ class ImageSheetViewController: UIViewController {
     
     private func getActionSheet(accessGranted: Bool) -> UIAlertController {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let imageCollectionView = getCollectionView(parentRect: actionSheet.view.bounds)
+        self.actionSheet = actionSheet
+        let imageCollectionView = collectionView
         
         if accessGranted {
             actionSheet.title = "\n\n\n\n\n"
@@ -85,34 +103,8 @@ class ImageSheetViewController: UIViewController {
             actionSheet.addAction(action)
         }
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        self.actionSheet = actionSheet
+        
         return actionSheet
-    }
-    
-    private func getCollectionView(parentRect: CGRect) -> UICollectionView {
-        if let collectionView = collectionView {
-            collectionView.frame = CGRect(x: 8.0, y: 8.0, width: parentRect.width - 8.0 * 4, height: collectionHeight)
-            return collectionView
-        }
-        
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: collectionHeight, height: collectionHeight)
-        
-        let imageCollectionView = UICollectionView(frame: CGRect(x: 8.0, y: 8.0, width: parentRect.width - 8.0 * 4, height: collectionHeight), collectionViewLayout: layout)
-        
-        imageCollectionView.delegate = self
-        imageCollectionView.dataSource = self
-        imageCollectionView.showsVerticalScrollIndicator = false
-        imageCollectionView.showsHorizontalScrollIndicator = false
-        imageCollectionView.register(ImagesCollectionViewCell.self, forCellWithReuseIdentifier: reuseCellIdentifier)
-        imageCollectionView.backgroundColor = UIColor(white: 1.0, alpha: 0.0)
-        imageCollectionView.layer.cornerRadius = 6.0
-        imageCollectionView.clipsToBounds = true
-        
-        collectionView = imageCollectionView
-        
-        return imageCollectionView
     }
     
     private func prepareThumbnails(){
@@ -127,9 +119,7 @@ class ImageSheetViewController: UIViewController {
 //MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension ImageSheetViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let images = images else {
-            return 0
-        }
+        guard let images = images else { return 0 }
         return images.count
     }
     
@@ -158,6 +148,22 @@ extension ImageSheetViewController: UICollectionViewDelegate, UICollectionViewDa
         }
         
         actionSheet?.dismiss(animated: true)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        let highlightedCell = collectionView.cellForItem(at: indexPath) as! ImagesCollectionViewCell
+        animator.addAnimations {
+            highlightedCell.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        }
+        animator.startAnimation()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
+        let unhighlightedCell = collectionView.cellForItem(at: indexPath) as! ImagesCollectionViewCell
+        animator.addAnimations {
+            unhighlightedCell.transform = CGAffineTransform.identity
+        }
+        animator.startAnimation()
     }
 }
 
