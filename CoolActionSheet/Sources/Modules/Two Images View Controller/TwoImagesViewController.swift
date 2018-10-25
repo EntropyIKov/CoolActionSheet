@@ -16,41 +16,24 @@ class TwoImagesViewController: UIViewController {
     
     //MARK: - Property
     var imageSheetViewController: ImageSheetViewController!
+    var topImageViewAlertActions: [UIAlertAction] = []
+    var bottomImageViewAlertActions: [UIAlertAction] = []
     
     //MARK: - Action
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupView()
-        configureImageSheetViewController()
+        
+        imageSheetViewController = ImageSheetViewController()
+        addChild(imageSheetViewController)
     }
     
     @objc func topImageViewTap() {
-        
-        var actions: [UIAlertAction] = []
-        actions.append(UIAlertAction(title: "Pum pum", style: .default) { _ in print("Pum pum") })
-        actions.append(UIAlertAction(title: "Bum bum", style: .default) { _ in print("Bum bum") })
-        imageSheetViewController.set(actions: actions)
-        
-        imageSheetViewController.getImageHandler = { [weak self] image in
-            self?.topImageView.image = image
-        }
-        imageSheetViewController.targetSize = topImageView.frame.size
-        imageSheetViewController.showActionSheet()
+        configureAndShowImageSheetViewController(for: .top)
     }
     
     @objc func bottomImageViewTap() {
-        
-        var actions: [UIAlertAction] = []
-        actions.append(UIAlertAction(title: "Wrum wrum", style: .default) { _ in print("Wrum wrum") })
-        actions.append(UIAlertAction(title: "Zoom zoom", style: .default) { _ in print("Zoom zoom") })
-        imageSheetViewController.set(actions: actions)
-        
-        imageSheetViewController.getImageHandler = { [weak self] image in
-            self?.bottomImageView.image = image
-        }
-        imageSheetViewController.targetSize = bottomImageView.frame.size
-        imageSheetViewController.showActionSheet()
+        configureAndShowImageSheetViewController(for: .bottom)
     }
     
     //MARK: - Method
@@ -58,15 +41,39 @@ class TwoImagesViewController: UIViewController {
         let topGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(topImageViewTap))
         topImageView.isUserInteractionEnabled = true
         topImageView.addGestureRecognizer(topGestureRecognizer)
+        topImageViewAlertActions.append(UIAlertAction(title: "Pum pum", style: .default) { _ in print("Pum pum") })
+        topImageViewAlertActions.append(UIAlertAction(title: "Bum bum", style: .default) { _ in print("Bum bum") })
         
         let bottomGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(bottomImageViewTap))
         bottomImageView.isUserInteractionEnabled = true
         bottomImageView.addGestureRecognizer(bottomGestureRecognizer)
+        bottomImageViewAlertActions.append(UIAlertAction(title: "Wrum wrum", style: .default) { _ in print("Wrum wrum") })
+        bottomImageViewAlertActions.append(UIAlertAction(title: "Zoom zoom", style: .default) { _ in print("Zoom zoom") })
     }
     
-    func configureImageSheetViewController() {
-        imageSheetViewController = ImageSheetViewController()
-        addChild(imageSheetViewController)
+    private func configureAndShowImageSheetViewController(for position: ImagePositionEnum) {
+        switch position {
+        case .top:
+            imageSheetViewController.set(actions: topImageViewAlertActions)
+            imageSheetViewController.getImageHandler = { [weak self] image in
+                self?.topImageView.image = image
+            }
+            imageSheetViewController.targetSize = topImageView.frame.size
+        case .bottom:
+            imageSheetViewController.set(actions: bottomImageViewAlertActions)
+            imageSheetViewController.getImageHandler = { [weak self] image in
+                self?.bottomImageView.image = image
+            }
+            imageSheetViewController.targetSize = bottomImageView.frame.size
+        }
+        imageSheetViewController.showActionSheet()
     }
 
+}
+
+extension TwoImagesViewController {
+    private enum ImagePositionEnum {
+        case top
+        case bottom
+    }
 }
