@@ -10,7 +10,7 @@ import UIKit
 import Photos
 
 class ImageSheetViewController: UIViewController {
-
+    
     //MARK: - Property
     private let reuseCellIdentifier = "ImagesCollectionViewCell"
     private let collectionHeight: CGFloat = 100
@@ -91,6 +91,7 @@ class ImageSheetViewController: UIViewController {
     
     private func getCollectionView(parentRect: CGRect) -> UICollectionView {
         if let collectionView = collectionView {
+            collectionView.frame = CGRect(x: 8.0, y: 8.0, width: parentRect.width - 8.0 * 4, height: collectionHeight)
             return collectionView
         }
         
